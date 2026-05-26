@@ -2,43 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
+use Illuminate\Http\Request;
 
-class PageController
+class PageController extends Controller
 {
     /**
-     * Display the intro / hub page.
+     * Intro page — collection icons as navigation links.
      */
-    public function intro(): View
+    public function intro()
     {
         $collections = [
             [
-                'name'  => 'Footwear',
-                'slug'  => 'footwear',
-                'desc'  => 'Premium handcrafted leather shoes',
-                'icon'  => 'footwear',
-                'color' => 'from-amber-900/20 to-amber-800/10',
+                'name'     => 'Footwear',
+                'subtitle' => 'Premium leather shoes',
+                'icon'     => 'footwear',
+                'url'      => '#',
             ],
             [
-                'name'  => 'Bags',
-                'slug'  => 'bags',
-                'desc'  => 'Elegant leather bags & accessories',
-                'icon'  => 'bags',
-                'color' => 'from-stone-800/20 to-stone-700/10',
+                'name'     => 'Bags',
+                'subtitle' => 'Elegant leather bags',
+                'icon'     => 'bags',
+                'url'      => '#',
             ],
             [
-                'name'  => 'Belts',
-                'slug'  => 'belts',
-                'desc'  => 'Handcrafted belts for every occasion',
-                'icon'  => 'belts',
-                'color' => 'from-yellow-900/20 to-yellow-800/10',
+                'name'     => 'Belts',
+                'subtitle' => 'Handcrafted belts',
+                'icon'     => 'belts',
+                'url'      => '#',
             ],
             [
-                'name'  => 'Wallets',
-                'slug'  => 'wallets',
-                'desc'  => 'Fine leather wallets & cardholders',
-                'icon'  => 'wallets',
-                'color' => 'from-zinc-800/20 to-zinc-700/10',
+                'name'     => 'Wallets',
+                'subtitle' => 'Fine leather wallets',
+                'icon'     => 'wallets',
+                'url'      => '#',
             ],
         ];
 

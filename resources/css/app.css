@@ -2,29 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Custom Animations ──────────────────────────────────── */
-@layer utilities {
-    .animate-fade-in {
-        animation: fadeIn 0.8s ease-out forwards;
-    }
-
-    .animate-fade-in-up {
-        animation: fadeInUp 0.8s ease-out forwards;
-    }
-
-    .animate-scale-in {
-        animation: scaleIn 0.6s ease-out forwards;
-    }
-
-    .animation-delay-100 { animation-delay: 0.1s; }
-    .animation-delay-200 { animation-delay: 0.2s; }
-    .animation-delay-300 { animation-delay: 0.3s; }
-    .animation-delay-400 { animation-delay: 0.4s; }
-    .animation-delay-500 { animation-delay: 0.5s; }
-    .animation-delay-600 { animation-delay: 0.6s; }
-    .animation-delay-700 { animation-delay: 0.7s; }
-    .animation-delay-800 { animation-delay: 0.8s; }
+/* ── Base ─────────────────────────────────────── */
+body {
+    background-color: #fafafa;
 }
+
+/* ── Animations ───────────────────────────────── */
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+    opacity: 0;
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+/* Staggered delays */
+.ad-1 { animation-delay: 0.15s; }
+.ad-2 { animation-delay: 0.30s; }
+.ad-3 { animation-delay: 0.45s; }
+.ad-4 { animation-delay: 0.60s; }
+.ad-5 { animation-delay: 0.75s; }
+.ad-6 { animation-delay: 0.85s; }
+.ad-7 { animation-delay: 0.95s; }
+.ad-8 { animation-delay: 1.05s; }
+.ad-9 { animation-delay: 1.20s; }
 
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -32,28 +40,37 @@
 }
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
+    from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.9); }
+    from { opacity: 0; transform: scale(0.92); }
     to   { opacity: 1; transform: scale(1); }
 }
 
-/* ── Subtle Shimmer on Gold Elements ────────────────────── */
-.shimmer {
-    background: linear-gradient(
-        110deg,
-        transparent 33%,
-        rgba(212, 149, 43, 0.08) 50%,
-        transparent 67%
-    );
-    background-size: 300% 100%;
-    animation: shimmer 4s ease-in-out infinite;
+/* ── Collection Cards ─────────────────────────── */
+.collection-card {
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-@keyframes shimmer {
-    0%   { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+.collection-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 20px 50px rgba(184, 134, 11, 0.10),
+        0  8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.collection-card:hover .card-icon {
+    background-color: rgba(184, 134, 11, 0.10);
+    border-color: rgba(184, 134, 11, 0.25);
+}
+
+.collection-card:hover .card-title {
+    color: #B8860B;
+}
+
+.collection-card:hover .card-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
 }
