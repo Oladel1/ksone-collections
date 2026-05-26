@@ -22,7 +22,7 @@
         <div class="animate-fade-in ad-1 mb-4">
             <img src="{{ asset('images/logo.png') }}"
                  alt="KS-One Logo"
-                 class="w-16 h-16 sm:w-20 sm:h-20 object-contain">
+                 class="logo-pulse w-16 h-16 sm:w-20 sm:h-20 object-contain">
         </div>
 
         {{-- Brand Name --}}
@@ -53,7 +53,7 @@
         {{-- Decorative Divider --}}
         <div class="animate-fade-in ad-5 flex items-center gap-3 mt-10 mb-12">
             <div class="w-10 h-px bg-gradient-to-r from-transparent to-brand-300/60"></div>
-            <div class="w-1.5 h-1.5 rounded-full bg-brand-500/50"></div>
+            <div class="divider-dot w-1.5 h-1.5 rounded-full bg-brand-500/50"></div>
             <div class="w-10 h-px bg-gradient-to-l from-transparent to-brand-300/60"></div>
         </div>
 
@@ -68,11 +68,12 @@
                           bg-white/80 backdrop-blur-sm
                           shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
 
-                    {{-- Icon --}}
-                    <div class="card-icon w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center
-                                rounded-xl bg-[#f5f5f5] border border-black/[0.05]
-                                transition-all duration-400">
-                        @include('components.icons.' . $collection['icon'])
+                    {{-- Icon Container --}}
+                    <div class="card-icon shimmer-{{ $loop->iteration }} w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center
+                                rounded-xl bg-[#f5f5f5] border border-black/[0.05]">
+                        <div class="icon-float-{{ $loop->iteration }}">
+                            @include('components.icons.' . $collection['icon'])
+                        </div>
                     </div>
 
                     {{-- Label --}}
