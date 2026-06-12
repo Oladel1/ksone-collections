@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="KS-One Footwear — Premium handcrafted leather footwear, proudly made in Nigeria.">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'KS-One Footwear — Handcrafted in Nigeria')</title>
 
@@ -42,8 +43,18 @@
         </svg>
     </a>
 
-    {{-- Paystack inline script (API key to be provided) --}}
+    {{-- Paystack Inline JS --}}
     <script src="https://js.paystack.co/v2/inline.js"></script>
+
+    {{-- Pass config to JS --}}
+    <script>
+        window.KS_CONFIG = {
+            paystackKey: "{{ config('services.paystack.public_key') }}",
+            verifyUrl: "{{ url('/api/paystack/verify') }}",
+            csrfToken: "{{ csrf_token() }}",
+            whatsapp: "{{ $whatsapp ?? '2347035515612' }}"
+        };
+    </script>
 
     @stack('scripts')
 </body>

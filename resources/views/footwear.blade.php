@@ -192,15 +192,29 @@
                                 <span class="text-xl font-black text-[#1a1a1a]">
                                     ₦{{ number_format($product['price']) }}
                                 </span>
-                                <button class="order-btn px-5 py-2.5 bg-[#25D366] text-white text-sm font-semibold
-                                               rounded-full hover:bg-[#20bd5a] transition-all duration-300
-                                               flex items-center gap-1.5 shadow-sm hover:shadow-md"
-                                        data-product-id="{{ $product['id'] }}"
-                                        data-product-name="{{ $product['name'] }}"
-                                        data-product-price="{{ $product['price'] }}"
-                                        data-whatsapp="{{ $whatsapp }}">
-                                    💬 Order
-                                </button>
+                                <div class="flex items-center gap-2">
+                                    <button class="pay-btn px-5 py-2.5 bg-[#1a1a1a] text-white text-sm font-semibold
+                                                   rounded-full hover:bg-black transition-all duration-300
+                                                   flex items-center gap-1.5 shadow-sm hover:shadow-md"
+                                            data-product-id="{{ $product['id'] }}"
+                                            data-product-name="{{ $product['name'] }}"
+                                            data-product-price="{{ $product['price'] }}"
+                                            data-product-image="{{ asset('images/' . $product['image']) }}">
+                                        🛒 Buy Now
+                                    </button>
+                                    <button class="order-btn w-10 h-10 bg-[#25D366] text-white text-sm
+                                                   rounded-full hover:bg-[#20bd5a] transition-all duration-300
+                                                   flex items-center justify-center shadow-sm hover:shadow-md
+                                                   disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-[#25D366] disabled:shadow-none"
+                                            data-product-id="{{ $product['id'] }}"
+                                            data-product-name="{{ $product['name'] }}"
+                                            data-product-price="{{ $product['price'] }}"
+                                            data-whatsapp="{{ $whatsapp }}"
+                                            title="Order via WhatsApp"
+                                            disabled>
+                                        💬
+                                    </button>
+                                </div>
                             </div>
 
                         </div>
@@ -374,5 +388,103 @@
         </div>
     </div>
 </section>
+
+
+
+{{-- ═══════ PAYMENT MODAL ═══════ --}}
+<div id="payment-modal" class="fixed inset-0 z-[100] hidden">
+    {{-- Backdrop --}}
+    <div id="modal-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+
+    {{-- Modal Card --}}
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden
+                    transform transition-all duration-300 scale-95 opacity-0" id="modal-card">
+
+            {{-- Close button --}}
+            <button id="modal-close"
+                    class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/5 hover:bg-black/10
+                           flex items-center justify-center text-[#888] hover:text-[#1a1a1a] transition-all z-10">
+                ✕
+            </button>
+
+            {{-- Product Summary --}}
+            <div class="flex items-center gap-4 p-6 bg-[#fafafa] border-b border-black/[0.06]">
+                <img id="modal-product-image" src="" alt=""
+                     class="w-16 h-16 rounded-xl object-cover border border-black/[0.06]">
+                <div>
+                    <h3 id="modal-product-name" class="font-bold text-base text-[#1a1a1a]"></h3>
+                    <p class="text-sm text-[#888] mt-0.5">
+                        Size: <span id="modal-product-size" class="font-semibold text-[#555]">—</span>
+                    </p>
+                    <p id="modal-product-price" class="text-lg font-black text-brand-600 mt-1"></p>
+                </div>
+            </div>
+
+            {{-- Form --}}
+            <div class="p-6">
+                <h4 class="font-bold text-sm text-[#1a1a1a] mb-4">Complete Your Order</h4>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-[#555] mb-1.5">Full Name</label>
+                        <input type="text" id="pay-name" placeholder="Your full name"
+                               class="w-full px-4 py-3 rounded-xl border border-black/[0.1] bg-[#fafafa]
+                                      text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20
+                                      outline-none transition-all duration-200" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-[#555] mb-1.5">Email Address</label>
+                        <input type="email" id="pay-email" placeholder="your@email.com"
+                               class="w-full px-4 py-3 rounded-xl border border-black/[0.1] bg-[#fafafa]
+                                      text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20
+                                      outline-none transition-all duration-200" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-[#555] mb-1.5">Phone Number</label>
+                        <input type="tel" id="pay-phone" placeholder="08012345678"
+                               class="w-full px-4 py-3 rounded-xl border border-black/[0.1] bg-[#fafafa]
+                                      text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20
+                                      outline-none transition-all duration-200" required>
+                    </div>
+                </div>
+
+                {{-- Pay Button --}}
+                <button id="pay-submit"
+                        class="w-full mt-6 px-6 py-4 bg-[#1a1a1a] text-white text-sm font-semibold tracking-wider uppercase
+                               rounded-full hover:bg-black transition-all duration-300 shadow-lg hover:shadow-xl
+                               flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                    <span id="pay-btn-text">Pay ₦0</span>
+                </button>
+
+                <p class="text-xs text-center text-[#aaa] mt-3">
+                    Secured by <strong>Paystack</strong> · Test mode
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- ═══════ SUCCESS TOAST ═══════ --}}
+<div id="success-toast"
+     class="fixed top-6 left-1/2 -translate-x-1/2 z-[110] hidden
+            bg-white border border-green-200 shadow-xl rounded-2xl px-6 py-4 max-w-sm w-full mx-4
+            transform -translate-y-4 opacity-0 transition-all duration-300">
+    <div class="flex items-start gap-3">
+        <span class="text-2xl">✅</span>
+        <div>
+            <h4 class="font-bold text-sm text-[#1a1a1a]">Payment Successful!</h4>
+            <p class="text-xs text-[#888] mt-1" id="success-message">
+                Your order has been placed. We'll confirm via WhatsApp shortly.
+            </p>
+            <p class="text-xs text-[#888] mt-0.5">
+                Ref: <span id="success-ref" class="font-mono font-semibold text-[#555]"></span>
+            </p>
+        </div>
+    </div>
+</div>
 
 @endsection

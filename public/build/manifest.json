@@ -1,0 +1,24 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-Dk6lxGGK.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/footwear.css": {
+    "file": "assets/footwear-DRZfSLo1.css",
+    "src": "resources/css/footwear.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-DsbP9Jus.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/footwear.js": {
+    "file": "assets/footwear-I66lofAO.js",
+    "name": "footwear",
+    "src": "resources/js/footwear.js",
+    "isEntry": true
+  }
+}
