@@ -22,6 +22,11 @@ class PageController extends Controller
                 'image'       => 'products/product-01-black-covered-mule-40k.jpeg',
                 'badge'       => null,
                 'sizes'       => [39, 40, 41, 42, 43, 44, 45],
+                'variants'    => [
+                    ['name' => 'Black',  'color' => '#1a1a1a'],
+                    ['name' => 'Brown',  'color' => '#8B4513'],
+                    ['name' => 'Tan',    'color' => '#D2B48C'],
+                ],
             ],
             [
                 'id'          => 2,
@@ -33,6 +38,11 @@ class PageController extends Controller
                 'image'       => 'products/product-02-brown-h-slide-70k.jpeg',
                 'badge'       => 'popular',
                 'sizes'       => [39, 40, 41, 42, 43, 44, 45],
+                'variants'    => [
+                    ['name' => 'Brown',  'color' => '#8B4513'],
+                    ['name' => 'Black',  'color' => '#1a1a1a'],
+                    ['name' => 'Tan',    'color' => '#D2B48C'],
+                ],
             ],
             [
                 'id'          => 3,
@@ -44,6 +54,11 @@ class PageController extends Controller
                 'image'       => 'products/product-03-brown-loafer-85k.jpeg',
                 'badge'       => 'premium',
                 'sizes'       => [39, 40, 41, 42, 43, 44, 45],
+                'variants'    => [
+                    ['name' => 'Brown',    'color' => '#8B4513'],
+                    ['name' => 'Black',    'color' => '#1a1a1a'],
+                    ['name' => 'Burgundy', 'color' => '#800020'],
+                ],
             ],
             [
                 'id'          => 4,
@@ -55,6 +70,11 @@ class PageController extends Controller
                 'image'       => 'products/product-04-black-loafer-55k.jpeg',
                 'badge'       => null,
                 'sizes'       => [39, 40, 41, 42, 43, 44, 45],
+                'variants'    => [
+                    ['name' => 'Black',  'color' => '#1a1a1a'],
+                    ['name' => 'Brown',  'color' => '#8B4513'],
+                    ['name' => 'Navy',   'color' => '#1B2A4A'],
+                ],
             ],
             [
                 'id'          => 5,
@@ -66,6 +86,11 @@ class PageController extends Controller
                 'image'       => 'products/product-05-black-padded-slide-25k.jpeg',
                 'badge'       => null,
                 'sizes'       => [39, 40, 41, 42, 43, 44, 45],
+                'variants'    => [
+                    ['name' => 'Black',  'color' => '#1a1a1a'],
+                    ['name' => 'Brown',  'color' => '#8B4513'],
+                    ['name' => 'Olive',  'color' => '#556B2F'],
+                ],
             ],
             [
                 'id'          => 6,
@@ -77,6 +102,11 @@ class PageController extends Controller
                 'image'       => 'products/product-06-buckle-loafer-25k.jpeg',
                 'badge'       => null,
                 'sizes'       => [39, 40, 41, 42, 43, 44, 45],
+                'variants'    => [
+                    ['name' => 'Black',  'color' => '#1a1a1a'],
+                    ['name' => 'Brown',  'color' => '#8B4513'],
+                    ['name' => 'Tan',    'color' => '#D2B48C'],
+                ],
             ],
         ];
     }

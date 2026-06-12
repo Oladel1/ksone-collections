@@ -174,17 +174,42 @@
                                 {{ $product['description'] }}
                             </p>
 
+                            {{-- Variants (Color) --}}
+                            @if (!empty($product['variants']))
+                                <div class="mt-4">
+                                    <span class="text-xs font-semibold text-[#888] uppercase tracking-wider">
+                                        Color: <span class="variant-label text-[#555]" data-product="{{ $product['id'] }}">—</span>
+                                    </span>
+                                    <div class="flex flex-wrap items-center gap-2 mt-2">
+                                        @foreach ($product['variants'] as $variant)
+                                            <button class="variant-btn w-8 h-8 rounded-full border-2 border-black/[0.08]
+                                                           hover:border-brand-500 transition-all duration-200
+                                                           flex items-center justify-center relative
+                                                           focus:outline-none"
+                                                    data-variant="{{ $variant['name'] }}"
+                                                    data-product="{{ $product['id'] }}"
+                                                    title="{{ $variant['name'] }}"
+                                                    style="background-color: {{ $variant['color'] }};">
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
                             {{-- Sizes --}}
-                            <div class="flex flex-wrap gap-2 mt-4">
-                                @foreach ($product['sizes'] as $size)
-                                    <button class="size-btn w-9 h-9 rounded-lg border border-black/[0.1] text-xs font-semibold text-[#555]
-                                                   hover:border-brand-500 hover:text-brand-500 transition-all duration-200
-                                                   flex items-center justify-center"
-                                            data-size="{{ $size }}"
-                                            data-product="{{ $product['id'] }}">
-                                        {{ $size }}
-                                    </button>
-                                @endforeach
+                            <div class="mt-3">
+                                <span class="text-xs font-semibold text-[#888] uppercase tracking-wider">Size</span>
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    @foreach ($product['sizes'] as $size)
+                                        <button class="size-btn w-9 h-9 rounded-lg border border-black/[0.1] text-xs font-semibold text-[#555]
+                                                       hover:border-brand-500 hover:text-brand-500 transition-all duration-200
+                                                       flex items-center justify-center"
+                                                data-size="{{ $size }}"
+                                                data-product="{{ $product['id'] }}">
+                                            {{ $size }}
+                                        </button>
+                                    @endforeach
+                                </div>
                             </div>
 
                             {{-- Price + Order --}}
@@ -415,7 +440,8 @@
                 <div>
                     <h3 id="modal-product-name" class="font-bold text-base text-[#1a1a1a]"></h3>
                     <p class="text-sm text-[#888] mt-0.5">
-                        Size: <span id="modal-product-size" class="font-semibold text-[#555]">—</span>
+                        Color: <span id="modal-product-variant" class="font-semibold text-[#555]">—</span>
+                        · Size: <span id="modal-product-size" class="font-semibold text-[#555]">—</span>
                     </p>
                     <p id="modal-product-price" class="text-lg font-black text-brand-600 mt-1"></p>
                 </div>

@@ -72,6 +72,12 @@ body {
     border-color: #B8860B;
 }
 
+/* ── Variant (Color) Swatch Selected ── */
+.variant-btn.selected {
+    border-color: #B8860B;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #B8860B;
+}
+
 /* ── Filter Button States ────────────── */
 .filter-btn.active {
     background-color: #1a1a1a;

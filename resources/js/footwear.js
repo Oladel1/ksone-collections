@@ -78,6 +78,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    // ── Helper: check if both variant + size are selected ──
+    function checkOrderReady(productId) {
+        const hasVariant = !!document.querySelector(`.variant-btn[data-product="${productId}"].selected`);
+        const hasSize = !!document.querySelector(`.size-btn[data-product="${productId}"].selected`);
+        const orderBtn = document.querySelector(`.order-btn[data-product-id="${productId}"]`);
+        if (orderBtn) {
+            orderBtn.disabled = !(hasVariant && hasSize);
+        }
+    }
+
+
+    // ── Variant (Color) Selection ─────────────────
+    document.querySelectorAll('.variant-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const productId = btn.dataset.product;
+            // Deselect siblings
+            document.querySelectorAll(`.variant-btn[data-product="${productId}"]`).forEach(v => {
+                v.classList.remove('selected');
+            });
+            btn.classList.add('selected');
+
+            // Update the color label
+            const label = document.querySelector(`.variant-label[data-product="${productId}"]`);
+            if (label) label.textContent = btn.dataset.variant;
+
+            checkOrderReady(productId);
+        });
+    });
+
+
     // ── Size Selection ────────────────────────────
     document.querySelectorAll('.size-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -88,11 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             btn.classList.add('selected');
 
-            // Enable WhatsApp order button for this product
-            const orderBtn = document.querySelector(`.order-btn[data-product-id="${productId}"]`);
-            if (orderBtn) {
-                orderBtn.disabled = false;
-            }
+            checkOrderReady(productId);
         });
     });
 
@@ -110,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Populate modal
         document.getElementById('modal-product-name').textContent = product.name;
         document.getElementById('modal-product-price').textContent = '₦' + parseInt(product.price).toLocaleString();
+        document.getElementById('modal-product-variant').textContent = product.variant || '—';
         document.getElementById('modal-product-size').textContent = product.size || '—';
         document.getElementById('pay-btn-text').textContent = 'Pay ₦' + parseInt(product.price).toLocaleString();
 
@@ -149,23 +176,37 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.pay-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const productId = btn.dataset.productId;
+            const selectedVariant = document.querySelector(`.variant-btn[data-product="${productId}"].selected`);
             const selectedSize = document.querySelector(`.size-btn[data-product="${productId}"].selected`);
 
+            let missing = false;
+
+            if (!selectedVariant) {
+                const variantBtns = document.querySelectorAll(`.variant-btn[data-product="${productId}"]`);
+                variantBtns.forEach(v => {
+                    v.classList.add('ring-2', 'ring-red-400');
+                    setTimeout(() => v.classList.remove('ring-2', 'ring-red-400'), 1500);
+                });
+                missing = true;
+            }
+
             if (!selectedSize) {
-                // Flash the size buttons to prompt selection
                 const sizeBtns = document.querySelectorAll(`.size-btn[data-product="${productId}"]`);
                 sizeBtns.forEach(s => {
                     s.classList.add('ring-2', 'ring-red-400');
                     setTimeout(() => s.classList.remove('ring-2', 'ring-red-400'), 1500);
                 });
-                return;
+                missing = true;
             }
+
+            if (missing) return;
 
             openModal({
                 id: productId,
                 name: btn.dataset.productName,
                 price: btn.dataset.productPrice,
                 image: btn.dataset.productImage,
+                variant: selectedVariant.dataset.variant,
                 size: selectedSize.dataset.size
             });
         });
@@ -221,6 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         { display_name: "Customer Name", variable_name: "customer_name", value: name },
                         { display_name: "Phone", variable_name: "phone", value: phone },
                         { display_name: "Product", variable_name: "product", value: currentProduct.name },
+                        { display_name: "Color", variable_name: "variant", value: currentProduct.variant },
                         { display_name: "Size", variable_name: "size", value: currentProduct.size },
                         { display_name: "Product ID", variable_name: "product_id", value: currentProduct.id }
                     ]
@@ -288,23 +330,39 @@ document.addEventListener('DOMContentLoaded', () => {
             const whatsapp = btn.dataset.whatsapp;
             const productId = btn.dataset.productId;
 
-            // Get selected size — require it before proceeding
+            // Require both variant and size before proceeding
+            const selectedVariant = document.querySelector(`.variant-btn[data-product="${productId}"].selected`);
             const selectedSize = document.querySelector(`.size-btn[data-product="${productId}"].selected`);
+
+            let missing = false;
+
+            if (!selectedVariant) {
+                const variantBtns = document.querySelectorAll(`.variant-btn[data-product="${productId}"]`);
+                variantBtns.forEach(v => {
+                    v.classList.add('ring-2', 'ring-red-400');
+                    setTimeout(() => v.classList.remove('ring-2', 'ring-red-400'), 1500);
+                });
+                missing = true;
+            }
+
             if (!selectedSize) {
-                // Flash the size buttons to prompt selection
                 const sizeBtns = document.querySelectorAll(`.size-btn[data-product="${productId}"]`);
                 sizeBtns.forEach(s => {
                     s.classList.add('ring-2', 'ring-red-400');
                     setTimeout(() => s.classList.remove('ring-2', 'ring-red-400'), 1500);
                 });
-                return;
+                missing = true;
             }
 
+            if (missing) return;
+
+            const variant = selectedVariant.dataset.variant;
             const size = selectedSize.dataset.size;
 
             // Build WhatsApp message
             const message = `Hello KS-One! I'd like to order:\n\n` +
                           `📦 Product: ${name}\n` +
+                          `🎨 Color: ${variant}\n` +
                           `📏 Size: ${size}\n` +
                           `💰 Price: ₦${price}\n\n` +
                           `Please confirm availability. Thank you!`;
