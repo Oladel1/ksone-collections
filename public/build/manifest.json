@@ -1,12 +1,23 @@
 {
+  "resources/css/admin.css": {
+    "file": "assets/admin-CUoOSOEI.css",
+    "src": "resources/css/admin.css",
+    "isEntry": true
+  },
   "resources/css/app.css": {
-    "file": "assets/app-DpQTE-zD.css",
+    "file": "assets/app-ykXHMPnM.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/css/footwear.css": {
-    "file": "assets/footwear-DDjl6I0C.css",
+    "file": "assets/footwear-YGzNhOA8.css",
     "src": "resources/css/footwear.css",
+    "isEntry": true
+  },
+  "resources/js/admin.js": {
+    "file": "assets/admin-CpOtDUtT.js",
+    "name": "admin",
+    "src": "resources/js/admin.js",
     "isEntry": true
   },
   "resources/js/app.js": {
@@ -16,7 +27,7 @@
     "isEntry": true
   },
   "resources/js/footwear.js": {
-    "file": "assets/footwear-Wt_JtEPV.js",
+    "file": "assets/footwear-BZ-U4sET.js",
     "name": "footwear",
     "src": "resources/js/footwear.js",
     "isEntry": true

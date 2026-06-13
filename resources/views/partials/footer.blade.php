@@ -1,4 +1,7 @@
 {{-- Footer --}}
+@php
+    $fs = $s ?? [];
+@endphp
 <footer class="bg-[#1a1a1a] text-white/80 pt-16 pb-8">
     <div class="max-w-7xl mx-auto px-6">
 
@@ -11,8 +14,7 @@
                     <span class="text-xl font-extrabold text-white">KS-ONE</span>
                 </div>
                 <p class="text-sm leading-relaxed text-white/60">
-                    Premium handcrafted footwear, proudly made in Nigeria.
-                    Every pair is a statement of quality and craftsmanship.
+                    {{ $fs['footer_description'] ?? 'Premium handcrafted footwear, proudly made in Nigeria. Every pair is a statement of quality and craftsmanship.' }}
                 </p>
             </div>
 
@@ -42,23 +44,23 @@
                 <h4 class="text-xs font-bold tracking-widest uppercase text-brand-500 mb-5">Contact</h4>
                 <ul class="space-y-3">
                     <li>
-                        <a href="https://wa.me/2347035515612" target="_blank" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2">
+                        <a href="https://wa.me/{{ $fs['whatsapp_number'] ?? '2347035515612' }}" target="_blank" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2">
                             💬 WhatsApp
                         </a>
                     </li>
                     <li>
-                        <a href="tel:+2347035515612" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2">
-                            📞 07035515612
+                        <a href="tel:+{{ $fs['whatsapp_number'] ?? '2347035515612' }}" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2">
+                            📞 {{ $fs['phone_display'] ?? '07035515612' }}
                         </a>
                     </li>
                     <li>
-                        <a href="https://instagram.com/ksonefootwear" target="_blank" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2">
-                            📸 @ksonefootwear
+                        <a href="https://instagram.com/{{ $fs['instagram_handle'] ?? 'ksonefootwear' }}" target="_blank" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2">
+                            📸 @{{ $fs['instagram_handle'] ?? 'ksonefootwear' }}
                         </a>
                     </li>
                     <li>
-                        <a href="https://tiktok.com/@ks1collections" target="_blank" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2">
-                            🎵 @ks1collections
+                        <a href="https://tiktok.com/@{{ $fs['tiktok_handle'] ?? 'ks1collections' }}" target="_blank" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2">
+                            🎵 @{{ $fs['tiktok_handle'] ?? 'ks1collections' }}
                         </a>
                     </li>
                 </ul>
@@ -69,7 +71,7 @@
         {{-- Divider + Copyright --}}
         <div class="border-t border-white/10 pt-6 text-center">
             <p class="text-xs text-white/40">
-                © {{ date('Y') }} KS-One Footwear. All rights reserved. Proudly Made in Nigeria 🇳🇬
+                © {{ date('Y') }} {{ $fs['footer_copyright'] ?? 'KS-One Footwear. All rights reserved. Proudly Made in Nigeria 🇳🇬' }}
             </p>
         </div>
 

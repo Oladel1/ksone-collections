@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 class PaystackController extends Controller
 {
     /**
-     * Verify a Paystack transaction after client-side payment.
+     * Verify a Paystack transaction and save the order to the database.
      */
     public function verify(Request $request)
     {
@@ -31,16 +32,33 @@ class PaystackController extends Controller
 
             if ($data['status'] && $data['data']['status'] === 'success') {
                 $txn = $data['data'];
+                $meta = $txn['metadata'] ?? [];
 
-                Log::info('Paystack payment verified', [
-                    'reference'  => $txn['reference'],
-                    'amount'     => $txn['amount'] / 100,
-                    'currency'   => $txn['currency'],
-                    'email'      => $txn['customer']['email'] ?? null,
-                    'name'       => $request->customer_name,
-                    'phone'      => $request->phone,
-                    'metadata'   => $txn['metadata'] ?? [],
-                    'paid_at'    => $txn['paid_at'] ?? null,
+                // Save order to database
+                $order = Order::updateOrCreate(
+                    ['reference' => $txn['reference']],
+                    [
+                        'customer_name'   => $meta['customer_name'] ?? ($request->customer_name ?? 'Unknown'),
+                        'customer_email'  => $txn['customer']['email'] ?? null,
+                        'customer_phone'  => $meta['phone'] ?? ($request->phone ?? null),
+                        'product_name'    => $meta['product_name'] ?? ($request->product_name ?? 'Unknown'),
+                        'product_image'   => $meta['product_image'] ?? null,
+                        'variant'         => $meta['variant'] ?? ($request->variant ?? null),
+                        'size'            => $meta['size'] ?? ($request->size ?? null),
+                        'amount'          => $txn['amount'] / 100,
+                        'currency'        => $txn['currency'] ?? 'NGN',
+                        'status'          => 'success',
+                        'channel'         => $txn['channel'] ?? 'card',
+                        'gateway_response'=> $txn['gateway_response'] ?? null,
+                        'paid_at'         => $txn['paid_at'] ?? now(),
+                        'paystack_data'   => $txn,
+                    ]
+                );
+
+                Log::info('Paystack payment verified & saved', [
+                    'order_id'  => $order->id,
+                    'reference' => $txn['reference'],
+                    'amount'    => $txn['amount'] / 100,
                 ]);
 
                 return response()->json([
@@ -49,6 +67,21 @@ class PaystackController extends Controller
                     'amount'    => $txn['amount'] / 100,
                 ]);
             }
+
+            // Save failed payment attempt too
+            Order::updateOrCreate(
+                ['reference' => $request->reference],
+                [
+                    'customer_name'    => $request->customer_name ?? 'Unknown',
+                    'customer_email'   => $data['data']['customer']['email'] ?? null,
+                    'product_name'     => $request->product_name ?? 'Unknown',
+                    'amount'           => ($data['data']['amount'] ?? 0) / 100,
+                    'currency'         => $data['data']['currency'] ?? 'NGN',
+                    'status'           => 'failed',
+                    'gateway_response' => $data['data']['gateway_response'] ?? 'Verification failed',
+                    'paystack_data'    => $data['data'] ?? null,
+                ]
+            );
 
             return response()->json([
                 'status'  => 'failed',

@@ -21,7 +21,7 @@
                      bg-brand-50 border border-brand-200/60 mb-8">
             <span class="text-base">🇳🇬</span>
             <span class="text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase text-brand-700">
-                Proudly Made in Nigeria
+                {{ $s['hero_badge'] ?? 'Proudly Made in Nigeria' }}
             </span>
         </div>
 
@@ -29,16 +29,20 @@
         <h1 class="animate-fade-in-up ad-2
                     text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight"
             style="letter-spacing: -2px;">
-            Step Into<br>
-            <span class="text-brand-500">Handcrafted</span><br>
-            Excellence
+            @php
+                $headlineLines = explode("\n", $s['hero_headline'] ?? "Step Into\nHandcrafted\nExcellence");
+            @endphp
+            @foreach ($headlineLines as $i => $line)
+                @if ($i === 1)<span class="text-brand-500">{{ trim($line) }}</span><br>
+                @else{{ trim($line) }}@if (!$loop->last)<br>@endif
+                @endif
+            @endforeach
         </h1>
 
         {{-- Subtitle --}}
         <p class="animate-fade-in-up ad-3
                   text-[#555] text-base sm:text-lg max-w-lg mx-auto mt-7 leading-relaxed">
-            Premium leather footwear designed for comfort, built with pride.
-            Every pair tells a story of Nigerian craftsmanship.
+            {{ $s['hero_subtitle'] ?? 'Premium leather footwear designed for comfort, built with pride. Every pair tells a story of Nigerian craftsmanship.' }}
         </p>
 
         {{-- CTAs --}}
@@ -46,14 +50,14 @@
             <a href="#shop"
                class="px-8 py-4 bg-[#1a1a1a] text-white text-sm font-semibold tracking-wider uppercase
                       rounded-full hover:bg-black transition-colors duration-300 shadow-lg hover:shadow-xl">
-                Shop Collection
+                {{ $s['hero_cta_shop'] ?? 'Shop Collection' }}
             </a>
             <a href="https://wa.me/{{ $whatsapp }}?text={{ urlencode('Hello KS-One! I\'d like to place an order.') }}"
                target="_blank"
                class="px-8 py-4 bg-[#25D366] text-white text-sm font-semibold tracking-wider uppercase
                       rounded-full hover:bg-[#20bd5a] transition-colors duration-300 shadow-lg hover:shadow-xl
                       flex items-center gap-2">
-                💬 Order on WhatsApp
+                💬 {{ $s['hero_cta_whatsapp'] ?? 'Order on WhatsApp' }}
             </a>
         </div>
 
@@ -63,27 +67,17 @@
 
 {{-- ═══════ MARQUEE STRIP ═══════ --}}
 <div class="bg-[#1a1a1a] py-4 overflow-hidden">
+    @php
+        $marqueeItems = array_map('trim', explode(',', $s['marquee_items'] ?? 'HANDCRAFTED,MADE IN NIGERIA,PREMIUM LEATHER,FREE SIZING,WHATSAPP ORDERS,NATIONWIDE DELIVERY'));
+    @endphp
     <div class="marquee-track flex items-center gap-12 whitespace-nowrap">
         @for ($i = 0; $i < 3; $i++)
             <span class="flex items-center gap-12">
-                <span class="flex items-center gap-2 text-white/80 text-xs sm:text-sm font-bold tracking-[0.25em] uppercase">
-                    <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span> HANDCRAFTED
-                </span>
-                <span class="flex items-center gap-2 text-white/80 text-xs sm:text-sm font-bold tracking-[0.25em] uppercase">
-                    <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span> MADE IN NIGERIA
-                </span>
-                <span class="flex items-center gap-2 text-white/80 text-xs sm:text-sm font-bold tracking-[0.25em] uppercase">
-                    <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span> PREMIUM LEATHER
-                </span>
-                <span class="flex items-center gap-2 text-white/80 text-xs sm:text-sm font-bold tracking-[0.25em] uppercase">
-                    <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span> FREE SIZING
-                </span>
-                <span class="flex items-center gap-2 text-white/80 text-xs sm:text-sm font-bold tracking-[0.25em] uppercase">
-                    <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span> WHATSAPP ORDERS
-                </span>
-                <span class="flex items-center gap-2 text-white/80 text-xs sm:text-sm font-bold tracking-[0.25em] uppercase">
-                    <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span> NATIONWIDE DELIVERY
-                </span>
+                @foreach ($marqueeItems as $item)
+                    <span class="flex items-center gap-2 text-white/80 text-xs sm:text-sm font-bold tracking-[0.25em] uppercase">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span> {{ $item }}
+                    </span>
+                @endforeach
             </span>
         @endfor
     </div>
@@ -96,12 +90,12 @@
 
         {{-- Section Header --}}
         <div class="text-center mb-14 scroll-reveal">
-            <span class="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-brand-500">Collection</span>
+            <span class="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-brand-500">{{ $s['shop_label'] ?? 'Collection' }}</span>
             <h2 class="text-3xl sm:text-4xl md:text-5xl font-black mt-3 tracking-tight" style="letter-spacing: -1px;">
-                Our Footwear
+                {{ $s['shop_title'] ?? 'Our Footwear' }}
             </h2>
             <p class="text-[#555] text-base sm:text-lg max-w-md mx-auto mt-4 leading-relaxed">
-                Each pair is handcrafted with premium materials for comfort and style.
+                {{ $s['shop_subtitle'] ?? 'Each pair is handcrafted with premium materials for comfort and style.' }}
             </p>
         </div>
 
@@ -261,7 +255,7 @@
             {{-- Image --}}
             <div class="scroll-reveal">
                 <div class="rounded-2xl overflow-hidden shadow-xl">
-                    <img src="{{ asset('images/products/product-01-black-covered-mule-40k.jpeg') }}"
+                    <img src="{{ asset('images/' . ($s['about_image'] ?? 'products/product-01-black-covered-mule-40k.jpeg')) }}"
                          alt="KS-One Workshop"
                          class="w-full h-[400px] sm:h-[500px] object-cover">
                 </div>
@@ -269,43 +263,28 @@
 
             {{-- Text --}}
             <div class="scroll-reveal">
-                <span class="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-brand-500">Our Story</span>
+                <span class="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-brand-500">{{ $s['about_label'] ?? 'Our Story' }}</span>
 
                 <h2 class="text-3xl sm:text-4xl md:text-5xl font-black mt-3 tracking-tight leading-tight" style="letter-spacing: -1px;">
-                    Crafted With Pride,<br>Worn With Confidence
+                    {!! nl2br(e($s['about_title'] ?? "Crafted With Pride,\nWorn With Confidence")) !!}
                 </h2>
 
                 <p class="text-[#555] text-base sm:text-lg mt-6 leading-relaxed">
-                    KS-one Footwear is a proudly Nigerian brand dedicated to crafting premium
-                    leather shoes that combine style, comfort, and durability.
+                    {{ $s['about_text_1'] ?? 'KS-one Footwear is a proudly Nigerian brand dedicated to crafting premium leather shoes that combine style, comfort, and durability.' }}
                 </p>
                 <p class="text-[#555] text-base sm:text-lg mt-4 leading-relaxed">
-                    Every pair is meticulously handcrafted by skilled artisans using the finest
-                    local materials — because we believe world-class footwear should come from home.
+                    {{ $s['about_text_2'] ?? 'Every pair is meticulously handcrafted by skilled artisans using the finest local materials — because we believe world-class footwear should come from home.' }}
                 </p>
 
                 {{-- Feature Cards --}}
                 <div class="grid grid-cols-2 gap-4 mt-8">
-                    <div class="bg-white rounded-xl p-5 border border-black/[0.06] shadow-sm">
-                        <span class="text-2xl">🇳🇬</span>
-                        <h4 class="font-bold text-sm mt-2.5">Made in Nigeria</h4>
-                        <p class="text-xs text-[#888] mt-1">100% locally crafted with pride</p>
-                    </div>
-                    <div class="bg-white rounded-xl p-5 border border-black/[0.06] shadow-sm">
-                        <span class="text-2xl">✋</span>
-                        <h4 class="font-bold text-sm mt-2.5">Handcrafted</h4>
-                        <p class="text-xs text-[#888] mt-1">Every pair made by skilled artisans</p>
-                    </div>
-                    <div class="bg-white rounded-xl p-5 border border-black/[0.06] shadow-sm">
-                        <span class="text-2xl">🪡</span>
-                        <h4 class="font-bold text-sm mt-2.5">Premium Leather</h4>
-                        <p class="text-xs text-[#888] mt-1">Only the finest materials used</p>
-                    </div>
-                    <div class="bg-white rounded-xl p-5 border border-black/[0.06] shadow-sm">
-                        <span class="text-2xl">🚚</span>
-                        <h4 class="font-bold text-sm mt-2.5">Nationwide Delivery</h4>
-                        <p class="text-xs text-[#888] mt-1">We deliver across Nigeria</p>
-                    </div>
+                    @for ($fi = 1; $fi <= 4; $fi++)
+                        <div class="bg-white rounded-xl p-5 border border-black/[0.06] shadow-sm">
+                            <span class="text-2xl">{{ $s["about_feature_{$fi}_emoji"] ?? '' }}</span>
+                            <h4 class="font-bold text-sm mt-2.5">{{ $s["about_feature_{$fi}_title"] ?? '' }}</h4>
+                            <p class="text-xs text-[#888] mt-1">{{ $s["about_feature_{$fi}_text"] ?? '' }}</p>
+                        </div>
+                    @endfor
                 </div>
             </div>
         </div>
@@ -319,12 +298,12 @@
 
         {{-- Header --}}
         <div class="text-center mb-14 scroll-reveal">
-            <span class="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-brand-500">Get In Touch</span>
+            <span class="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-brand-500">{{ $s['contact_label'] ?? 'Get In Touch' }}</span>
             <h2 class="text-3xl sm:text-4xl md:text-5xl font-black mt-3 tracking-tight" style="letter-spacing: -1px;">
-                Contact Us
+                {{ $s['contact_title'] ?? 'Contact Us' }}
             </h2>
             <p class="text-[#555] text-base sm:text-lg max-w-md mx-auto mt-4 leading-relaxed">
-                Have a question or want to place an order? Reach out through any of these channels.
+                {{ $s['contact_subtitle'] ?? 'Have a question or want to place an order? Reach out through any of these channels.' }}
             </p>
         </div>
 
@@ -339,7 +318,7 @@
                     <span class="w-12 h-12 rounded-full bg-[#25D366]/10 flex items-center justify-center text-xl">💬</span>
                     <div>
                         <h4 class="font-bold text-sm group-hover:text-brand-500 transition-colors">WhatsApp</h4>
-                        <p class="text-xs text-[#888] mt-0.5">07035515612 — fastest way to order</p>
+                        <p class="text-xs text-[#888] mt-0.5">{{ $s['phone_display'] ?? '07035515612' }} — fastest way to order</p>
                     </div>
                 </a>
 
@@ -350,29 +329,29 @@
                     <span class="w-12 h-12 rounded-full bg-brand-50 flex items-center justify-center text-xl">📞</span>
                     <div>
                         <h4 class="font-bold text-sm group-hover:text-brand-500 transition-colors">Phone</h4>
-                        <p class="text-xs text-[#888] mt-0.5">07035515612</p>
+                        <p class="text-xs text-[#888] mt-0.5">{{ $s['phone_display'] ?? '07035515612' }}</p>
                     </div>
                 </a>
 
                 {{-- Instagram --}}
-                <a href="https://instagram.com/ksonefootwear" target="_blank"
+                <a href="https://instagram.com/{{ $s['instagram_handle'] ?? 'ksonefootwear' }}" target="_blank"
                    class="flex items-center gap-4 p-5 bg-white rounded-xl border border-black/[0.06]
                           hover:border-brand-300 hover:shadow-md transition-all duration-300 group">
                     <span class="w-12 h-12 rounded-full bg-pink-50 flex items-center justify-center text-xl">📸</span>
                     <div>
                         <h4 class="font-bold text-sm group-hover:text-brand-500 transition-colors">Instagram</h4>
-                        <p class="text-xs text-[#888] mt-0.5">@ksonefootwear</p>
+                        <p class="text-xs text-[#888] mt-0.5">@{{ $s['instagram_handle'] ?? 'ksonefootwear' }}</p>
                     </div>
                 </a>
 
                 {{-- TikTok --}}
-                <a href="https://tiktok.com/@ks1collections" target="_blank"
+                <a href="https://tiktok.com/@{{ $s['tiktok_handle'] ?? 'ks1collections' }}" target="_blank"
                    class="flex items-center gap-4 p-5 bg-white rounded-xl border border-black/[0.06]
                           hover:border-brand-300 hover:shadow-md transition-all duration-300 group">
                     <span class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-xl">🎵</span>
                     <div>
                         <h4 class="font-bold text-sm group-hover:text-brand-500 transition-colors">TikTok</h4>
-                        <p class="text-xs text-[#888] mt-0.5">@ks1collections</p>
+                        <p class="text-xs text-[#888] mt-0.5">@{{ $s['tiktok_handle'] ?? 'ks1collections' }}</p>
                     </div>
                 </a>
             </div>

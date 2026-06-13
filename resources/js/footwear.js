@@ -268,6 +268,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     ]
                 },
                 onSuccess: (transaction) => {
+                    // Store product data for verification
+                    window._lastProduct = { ...currentProduct };
                     // Close payment modal
                     closeModal();
 
@@ -302,7 +304,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': config.csrfToken || document.querySelector('meta[name="csrf-token"]')?.content
             },
-            body: JSON.stringify({ reference, customer_name: customerName, phone })
+            body: JSON.stringify({
+                reference,
+                customer_name: customerName,
+                phone,
+                product_name: window._lastProduct?.name || '',
+                product_image: window._lastProduct?.image || '',
+                variant: window._lastProduct?.variant || '',
+                size: window._lastProduct?.size || ''
+            })
         }).catch(err => console.log('Verification request sent', err));
     }
 
