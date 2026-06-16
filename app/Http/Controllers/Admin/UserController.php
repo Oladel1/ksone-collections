@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -86,6 +87,24 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User updated successfully.');
+    }
+
+    /**
+     * Reset a user's password to a randomly generated temporary password.
+     */
+    public function resetPassword(User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Use the Change Password page to update your own password.');
+        }
+
+        $tempPassword = Str::random(12);
+
+        $user->update([
+            'password' => Hash::make($tempPassword),
+        ]);
+
+        return back()->with('success', "Password for {$user->name} has been reset to: {$tempPassword} — Please share it securely with the user.");
     }
 
     public function destroy(User $user)

@@ -4,6 +4,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\PaystackController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PasswordResetController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SettingController;
@@ -38,6 +39,12 @@ Route::prefix('admin')->group(function () {
     Route::get('/login',  [AuthController::class, 'showLogin'])->name('admin.login');
     Route::post('/login', [AuthController::class, 'login'])->name('admin.login.submit');
     Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
+
+    // Password Reset (email-based)
+    Route::get('/forgot-password',  [PasswordResetController::class, 'showForgotForm'])->name('admin.password.request');
+    Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])->name('admin.password.email');
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password',  [PasswordResetController::class, 'reset'])->name('admin.password.update');
 });
 
 
@@ -51,6 +58,10 @@ Route::prefix('admin')->middleware('admin')->group(function () {
 
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    // Change Own Password
+    Route::get('change-password', [PasswordResetController::class, 'showChangeForm'])->name('admin.password.change.form');
+    Route::post('change-password', [PasswordResetController::class, 'changePassword'])->name('admin.password.change');
 
     // Products
     Route::resource('products', ProductController::class)->names('admin.products');
@@ -69,6 +80,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
 
     // Users (super admin + permission)
     Route::resource('users', UserController::class)->names('admin.users')->except('show');
+    Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('admin.users.reset-password');
 
     // Roles (super admin + permission)
     Route::resource('roles', RoleController::class)->names('admin.roles')->except('show');

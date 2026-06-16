@@ -55,12 +55,12 @@
                     </li>
                     <li>
                         <a href="https://instagram.com/{{ $fs['instagram_handle'] ?? 'ksonefootwear' }}" target="_blank" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2">
-                            📸 @{{ $fs['instagram_handle'] ?? 'ksonefootwear' }}
+                            📸 {{ '@' . ($fs['instagram_handle'] ?? 'ksonefootwear') }}
                         </a>
                     </li>
                     <li>
-                        <a href="https://tiktok.com/@{{ $fs['tiktok_handle'] ?? 'ks1collections' }}" target="_blank" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2">
-                            🎵 @{{ $fs['tiktok_handle'] ?? 'ks1collections' }}
+                        <a href="https://tiktok.com/{{ '@' . ($fs['tiktok_handle'] ?? 'ks1collections') }}" target="_blank" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2">
+                            🎵 {{ '@' . ($fs['tiktok_handle'] ?? 'ks1collections') }}
                         </a>
                     </li>
                 </ul>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login — KS-One</title>
+    <title>Forgot Password — KS-One Admin</title>
     <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,11 +22,15 @@
                     KS-<span class="text-[#B8860B]">ONE</span>
                     <span class="text-white/40 text-sm font-normal ml-1">Admin</span>
                 </h1>
-                <p class="text-white/40 text-sm mt-2">Sign in to manage your store</p>
+                <p class="text-white/40 text-sm mt-2">Reset your password</p>
             </div>
 
-            {{-- Login Card --}}
+            {{-- Card --}}
             <div class="bg-white/[0.05] backdrop-blur border border-white/[0.08] rounded-2xl p-6 sm:p-8">
+
+                <p class="text-sm text-white/50 mb-5">
+                    Enter the email address associated with your account, and we'll send you a link to reset your password.
+                </p>
 
                 {{-- Success Status --}}
                 @if (session('status'))
@@ -44,13 +48,7 @@
                     </div>
                 @endif
 
-                @if (session('error'))
-                    <div class="mb-5 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/20 text-sm text-red-400">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
-                <form method="POST" action="{{ route('admin.login.submit') }}" class="space-y-5">
+                <form method="POST" action="{{ route('admin.password.email') }}" class="space-y-5">
                     @csrf
 
                     <div>
@@ -63,39 +61,19 @@
                                placeholder="admin@example.com" required autofocus>
                     </div>
 
-                    <div>
-                        <label for="password" class="block text-xs font-semibold text-white/60 mb-1.5 uppercase tracking-wider">Password</label>
-                        <input type="password" id="password" name="password"
-                               class="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.1]
-                                      text-white text-sm placeholder-white/30
-                                      focus:border-[#B8860B]/50 focus:ring-1 focus:ring-[#B8860B]/30
-                                      outline-none transition-all duration-200"
-                               placeholder="••••••••" required>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="remember"
-                                   class="w-4 h-4 rounded border-white/20 bg-white/[0.06] text-[#B8860B]
-                                          focus:ring-[#B8860B]/30 focus:ring-offset-0">
-                            <span class="text-sm text-white/50">Remember me</span>
-                        </label>
-                        <a href="{{ route('admin.password.request') }}" class="text-sm text-[#B8860B] hover:text-[#d4a017] transition-colors font-medium">
-                            Forgot Password?
-                        </a>
-                    </div>
-
                     <button type="submit"
                             class="w-full py-3.5 rounded-xl bg-[#B8860B] text-white text-sm font-semibold tracking-wider uppercase
                                    hover:bg-[#a07509] transition-all duration-300 shadow-lg shadow-[#B8860B]/20">
-                        Sign In
+                        Send Reset Link
                     </button>
                 </form>
             </div>
 
-            {{-- Footer --}}
-            <p class="text-center text-xs text-white/20 mt-6">
-                © {{ date('Y') }} KS-One Collections
+            {{-- Back to login --}}
+            <p class="text-center text-sm text-white/40 mt-6">
+                <a href="{{ route('admin.login') }}" class="text-[#B8860B] hover:text-[#d4a017] transition-colors font-medium">
+                    ← Back to Sign In
+                </a>
             </p>
         </div>
     </div>

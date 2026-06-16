@@ -340,18 +340,18 @@
                     <span class="w-12 h-12 rounded-full bg-pink-50 flex items-center justify-center text-xl">📸</span>
                     <div>
                         <h4 class="font-bold text-sm group-hover:text-brand-500 transition-colors">Instagram</h4>
-                        <p class="text-xs text-[#888] mt-0.5">@{{ $s['instagram_handle'] ?? 'ksonefootwear' }}</p>
+                        <p class="text-xs text-[#888] mt-0.5">{{ '@' . ($s['instagram_handle'] ?? 'ksonefootwear') }}</p>
                     </div>
                 </a>
 
                 {{-- TikTok --}}
-                <a href="https://tiktok.com/@{{ $s['tiktok_handle'] ?? 'ks1collections' }}" target="_blank"
+                <a href="https://tiktok.com/{{ '@' . ($s['tiktok_handle'] ?? 'ks1collections') }}" target="_blank"
                    class="flex items-center gap-4 p-5 bg-white rounded-xl border border-black/[0.06]
                           hover:border-brand-300 hover:shadow-md transition-all duration-300 group">
                     <span class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-xl">🎵</span>
                     <div>
                         <h4 class="font-bold text-sm group-hover:text-brand-500 transition-colors">TikTok</h4>
-                        <p class="text-xs text-[#888] mt-0.5">@{{ $s['tiktok_handle'] ?? 'ks1collections' }}</p>
+                        <p class="text-xs text-[#888] mt-0.5">{{ '@' . ($s['tiktok_handle'] ?? 'ks1collections') }}</p>
                     </div>
                 </a>
             </div>

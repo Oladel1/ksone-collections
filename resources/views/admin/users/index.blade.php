@@ -70,6 +70,13 @@
                                 @if (auth()->user()->hasPermission('edit-users'))
                                     <a href="{{ route('admin.users.edit', $user) }}" class="text-xs font-semibold text-[#B8860B] hover:underline">Edit</a>
                                 @endif
+                                @if (auth()->user()->hasPermission('edit-users') && $user->id !== auth()->id())
+                                    <form method="POST" action="{{ route('admin.users.reset-password', $user) }}"
+                                          onsubmit="return confirm('Reset password for {{ $user->name }}? A temporary password will be generated.')">
+                                        @csrf
+                                        <button type="submit" class="text-xs font-semibold text-blue-500 hover:underline">Reset PW</button>
+                                    </form>
+                                @endif
                                 @if (auth()->user()->hasPermission('delete-users') && $user->id !== auth()->id())
                                     <form method="POST" action="{{ route('admin.users.destroy', $user) }}"
                                           onsubmit="return confirm('Delete user {{ $user->name }}?')">
