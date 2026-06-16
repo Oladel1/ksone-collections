@@ -24,6 +24,14 @@
         </div>
 
         <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Username *</label>
+            <input type="text" name="username" value="{{ old('username', $user->username ?? '') }}"
+                   class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#B8860B] outline-none"
+                   placeholder="e.g. johndoe" required>
+            <p class="text-xs text-gray-400 mt-1">Used for login. Letters, numbers, dots, and underscores only.</p>
+        </div>
+
+        <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
             <input type="email" name="email" value="{{ old('email', $user->email ?? '') }}"
                    class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#B8860B] outline-none" required>

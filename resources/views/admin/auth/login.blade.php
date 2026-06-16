@@ -54,13 +54,13 @@
                     @csrf
 
                     <div>
-                        <label for="email" class="block text-xs font-semibold text-white/60 mb-1.5 uppercase tracking-wider">Email</label>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}"
+                        <label for="login" class="block text-xs font-semibold text-white/60 mb-1.5 uppercase tracking-wider">Email or Username</label>
+                        <input type="text" id="login" name="login" value="{{ old('login') }}"
                                class="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.1]
                                       text-white text-sm placeholder-white/30
                                       focus:border-[#B8860B]/50 focus:ring-1 focus:ring-[#B8860B]/30
                                       outline-none transition-all duration-200"
-                               placeholder="admin@example.com" required autofocus>
+                               placeholder="email or username" required autofocus>
                     </div>
 
                     <div>

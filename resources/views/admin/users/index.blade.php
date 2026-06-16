@@ -41,6 +41,7 @@
                                 </div>
                                 <div>
                                     <p class="font-medium text-gray-900">{{ $user->name }}</p>
+                                    <p class="text-xs text-gray-500">{{ '@' . $user->username }}</p>
                                     <p class="text-xs text-gray-400">{{ $user->email }}</p>
                                 </div>
                             </div>

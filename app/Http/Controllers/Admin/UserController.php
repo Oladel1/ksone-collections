@@ -28,6 +28,7 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
+            'username' => 'required|string|max:255|regex:/^[a-zA-Z0-9._]+$/|unique:users,username',
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'role_id'  => 'required|exists:roles,id',
@@ -42,6 +43,7 @@ class UserController extends Controller
 
         User::create([
             'name'      => $validated['name'],
+            'username'  => strtolower($validated['username']),
             'email'     => $validated['email'],
             'password'  => Hash::make($validated['password']),
             'role_id'   => $validated['role_id'],
@@ -62,6 +64,7 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
+            'username' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z0-9._]+$/', Rule::unique('users')->ignore($user->id)],
             'email'    => ['required', 'email', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:8|confirmed',
             'role_id'  => 'required|exists:roles,id',
@@ -76,6 +79,7 @@ class UserController extends Controller
 
         $user->update([
             'name'      => $validated['name'],
+            'username'  => strtolower($validated['username']),
             'email'     => $validated['email'],
             'role_id'   => $validated['role_id'],
             'is_active' => $request->boolean('is_active', true),
