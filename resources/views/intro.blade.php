@@ -57,8 +57,8 @@
             <div class="w-10 h-px bg-gradient-to-l from-transparent to-brand-300/60"></div>
         </div>
 
-        {{-- Collection Grid --}}
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-5 sm:gap-6 max-w-3xl w-full">
+        {{-- Collection Grid (dynamic from database) --}}
+        <div class="grid grid-cols-2 sm:grid-cols-{{ min(count($collections), 4) }} gap-5 sm:gap-6 max-w-3xl w-full">
 
             @foreach ($collections as $collection)
                 <a href="{{ $collection['url'] }}"
@@ -69,10 +69,21 @@
                           shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
 
                     {{-- Icon Container --}}
-                    <div class="card-icon shimmer-{{ $loop->iteration }} w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center
-                                rounded-xl bg-[#f5f5f5] border border-black/[0.05]">
-                        <div class="icon-float-{{ $loop->iteration }}">
-                            @include('components.icons.' . $collection['icon'])
+                    <div class="card-icon shimmer-{{ (($loop->iteration - 1) % 4) + 1 }} w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center
+                                rounded-xl bg-[#f5f5f5] border border-black/[0.05] overflow-hidden">
+                        <div class="icon-float-{{ (($loop->iteration - 1) % 4) + 1 }}">
+                            @if ($collection['icon_image'])
+                                <img src="{{ asset('images/' . $collection['icon_image']) }}"
+                                     alt="{{ $collection['name'] }}"
+                                     class="w-12 h-12 sm:w-16 sm:h-16 object-contain">
+                            @elseif (view()->exists('components.icons.' . $collection['slug']))
+                                @include('components.icons.' . $collection['slug'])
+                            @else
+                                {{-- Default icon --}}
+                                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-[#B8860B]/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/>
+                                </svg>
+                            @endif
                         </div>
                     </div>
 
@@ -82,9 +93,11 @@
                                    transition-colors duration-300">
                             {{ $collection['name'] }}
                         </h3>
-                        <p class="font-sans text-xs text-[#888] mt-1 hidden sm:block">
-                            {{ $collection['subtitle'] }}
-                        </p>
+                        @if ($collection['subtitle'])
+                            <p class="font-sans text-xs text-[#888] mt-1 hidden sm:block">
+                                {{ $collection['subtitle'] }}
+                            </p>
+                        @endif
                     </div>
 
                     {{-- Hover Arrow --}}

@@ -5,6 +5,7 @@ use App\Http\Controllers\PaystackController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PasswordResetController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SettingController;
@@ -18,12 +19,15 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// Phase 1: Intro page
+// Phase 1: Intro page (dynamic categories)
 Route::get('/', [PageController::class, 'intro'])->name('intro');
 
-// Phase 2: Footwear one-page site
-Route::get('/footwear', [PageController::class, 'footwear'])->name('footwear');
-Route::get('/footware', [PageController::class, 'footwear'])->name('footwear.alt');
+// Dynamic category page: /c/footwear, /c/bags, etc.
+Route::get('/c/{category:slug}', [PageController::class, 'category'])->name('category');
+
+// Backward-compatible aliases for the original footwear routes
+Route::get('/footwear', fn () => redirect()->route('category', 'footwear'))->name('footwear');
+Route::get('/footware', fn () => redirect()->route('category', 'footwear'))->name('footwear.alt');
 
 // Paystack payment verification
 Route::post('/api/paystack/verify', [PaystackController::class, 'verify'])->name('paystack.verify');
@@ -62,6 +66,11 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     // Change Own Password
     Route::get('change-password', [PasswordResetController::class, 'showChangeForm'])->name('admin.password.change.form');
     Route::post('change-password', [PasswordResetController::class, 'changePassword'])->name('admin.password.change');
+
+    // Categories
+    Route::resource('categories', CategoryController::class)->names('admin.categories');
+    Route::post('categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus'])
+        ->name('admin.categories.toggle-status');
 
     // Products
     Route::resource('products', ProductController::class)->names('admin.products');

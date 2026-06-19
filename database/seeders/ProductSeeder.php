@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductSize;
 use App\Models\ProductVariant;
@@ -11,11 +12,14 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
+        // Get the footwear category (created by CategorySeeder)
+        $footwear = Category::where('slug', 'footwear')->first();
+
         $products = [
             [
                 'slug'        => 'black-covered-mule',
                 'name'        => 'Black Covered Mule',
-                'category'    => 'mule',
+                'type'        => 'mule',
                 'description' => 'Premium leather mule with a clean finish for everyday comfort.',
                 'price'       => 40000,
                 'image'       => 'products/product-01-black-covered-mule-40k.jpeg',
@@ -31,7 +35,7 @@ class ProductSeeder extends Seeder
             [
                 'slug'        => 'brown-h-strap-slide',
                 'name'        => 'Brown H-Strap Slide',
-                'category'    => 'slide',
+                'type'        => 'slide',
                 'description' => 'Bold suede slide with a distinctive H-strap design.',
                 'price'       => 70000,
                 'image'       => 'products/product-02-brown-h-slide-70k.jpeg',
@@ -47,7 +51,7 @@ class ProductSeeder extends Seeder
             [
                 'slug'        => 'brown-classic-loafer',
                 'name'        => 'Brown Classic Loafer',
-                'category'    => 'loafer',
+                'type'        => 'loafer',
                 'description' => 'Polished brown loafer for smart-casual style and durable wear.',
                 'price'       => 85000,
                 'image'       => 'products/product-03-brown-loafer-85k.jpeg',
@@ -63,7 +67,7 @@ class ProductSeeder extends Seeder
             [
                 'slug'        => 'black-textured-loafer',
                 'name'        => 'Black Textured Loafer',
-                'category'    => 'loafer',
+                'type'        => 'loafer',
                 'description' => 'Sleek black loafer with textured detailing and chunky sole.',
                 'price'       => 55000,
                 'image'       => 'products/product-04-black-loafer-55k.jpeg',
@@ -79,7 +83,7 @@ class ProductSeeder extends Seeder
             [
                 'slug'        => 'black-padded-slide',
                 'name'        => 'Black Padded Slide',
-                'category'    => 'slide',
+                'type'        => 'slide',
                 'description' => 'Comfortable padded slide built for daily wear and easy styling.',
                 'price'       => 25000,
                 'image'       => 'products/product-05-black-padded-slide-25k.jpeg',
@@ -95,7 +99,7 @@ class ProductSeeder extends Seeder
             [
                 'slug'        => 'buckle-strap-loafer',
                 'name'        => 'Buckle Strap Loafer',
-                'category'    => 'loafer',
+                'type'        => 'loafer',
                 'description' => 'Refined buckle-strap loafer with a premium look for class and comfort.',
                 'price'       => 25000,
                 'image'       => 'products/product-06-buckle-loafer-25k.jpeg',
@@ -114,6 +118,11 @@ class ProductSeeder extends Seeder
             $sizes    = $data['sizes'];
             $variants = $data['variants'];
             unset($data['sizes'], $data['variants']);
+
+            // Assign to footwear category
+            if ($footwear) {
+                $data['category_id'] = $footwear->id;
+            }
 
             $product = Product::firstOrCreate(['slug' => $data['slug']], $data);
 

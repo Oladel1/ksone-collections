@@ -41,12 +41,13 @@
             <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
                 @php
                     $nav = [
-                        ['route' => 'admin.dashboard',      'icon' => 'dashboard',  'label' => 'Dashboard',     'perm' => 'view-dashboard'],
-                        ['route' => 'admin.products.index',  'icon' => 'products',   'label' => 'Products',      'perm' => 'view-products'],
-                        ['route' => 'admin.orders.index',    'icon' => 'orders',     'label' => 'Orders',        'perm' => 'view-orders'],
-                        ['route' => 'admin.settings.index',  'icon' => 'settings',   'label' => 'Site Settings', 'perm' => 'manage-settings'],
-                        ['route' => 'admin.users.index',     'icon' => 'users',      'label' => 'Users',         'perm' => 'view-users'],
-                        ['route' => 'admin.roles.index',     'icon' => 'roles',      'label' => 'Roles',         'perm' => 'view-roles'],
+                        ['route' => 'admin.dashboard',        'icon' => 'dashboard',    'label' => 'Dashboard',     'perm' => 'view-dashboard'],
+                        ['route' => 'admin.categories.index', 'icon' => 'categories',   'label' => 'Categories',    'perm' => 'view-categories'],
+                        ['route' => 'admin.products.index',   'icon' => 'products',     'label' => 'Products',      'perm' => 'view-products'],
+                        ['route' => 'admin.orders.index',     'icon' => 'orders',       'label' => 'Orders',        'perm' => 'view-orders'],
+                        ['route' => 'admin.settings.index',   'icon' => 'settings',     'label' => 'Site Settings', 'perm' => 'manage-settings'],
+                        ['route' => 'admin.users.index',      'icon' => 'users',        'label' => 'Users',         'perm' => 'view-users'],
+                        ['route' => 'admin.roles.index',      'icon' => 'roles',        'label' => 'Roles',         'perm' => 'view-roles'],
                     ];
                 @endphp
 
@@ -64,7 +65,7 @@
 
             {{-- View Site Link --}}
             <div class="px-3 pb-4">
-                <a href="{{ route('footwear') }}" target="_blank"
+                <a href="{{ route('intro') }}" target="_blank"
                    class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-white/40 hover:text-white/70 hover:bg-white/[0.06] transition-all duration-200">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>

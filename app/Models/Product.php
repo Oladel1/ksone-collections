@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Product extends Model
 {
     protected $fillable = [
-        'slug', 'name', 'category', 'description',
+        'slug', 'name', 'category_id', 'type', 'description',
         'price', 'image', 'badge', 'sort_order', 'is_active',
     ];
 
@@ -18,6 +19,14 @@ class Product extends Model
         'sort_order' => 'integer',
         'is_active'  => 'boolean',
     ];
+
+    /**
+     * The top-level category this product belongs to.
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     public function sizes(): HasMany
     {

@@ -32,10 +32,26 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Category *</label>
-                <input type="text" name="category" value="{{ old('category', $product->category ?? '') }}"
+                <select name="category_id"
+                        class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B]/20 outline-none"
+                        required>
+                    <option value="">Select category…</option>
+                    @foreach ($categories as $cat)
+                        <option value="{{ $cat->id }}"
+                            {{ old('category_id', $product->category_id ?? '') == $cat->id ? 'selected' : '' }}>
+                            {{ $cat->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Type *</label>
+                <input type="text" name="type" value="{{ old('type', $product->type ?? '') }}"
                        placeholder="e.g. loafer, slide, mule"
                        class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B]/20 outline-none"
                        required>
+                <p class="text-xs text-gray-400 mt-1">Sub-type used for filtering within the category page.</p>
             </div>
 
             <div>
@@ -45,17 +61,17 @@
                        required>
             </div>
 
-            <div class="sm:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                <textarea name="description" rows="3"
-                          class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B]/20 outline-none resize-vertical">{{ old('description', $product->description ?? '') }}</textarea>
-            </div>
-
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Badge</label>
                 <input type="text" name="badge" value="{{ old('badge', $product->badge ?? '') }}"
                        placeholder="e.g. popular, premium, new"
                        class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B]/20 outline-none">
+            </div>
+
+            <div class="sm:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea name="description" rows="3"
+                          class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B]/20 outline-none resize-vertical">{{ old('description', $product->description ?? '') }}</textarea>
             </div>
 
             <div>
@@ -64,8 +80,8 @@
                        class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B]/20 outline-none">
             </div>
 
-            <div class="sm:col-span-2">
-                <label class="flex items-center gap-2 cursor-pointer">
+            <div class="flex items-end">
+                <label class="flex items-center gap-2 cursor-pointer pb-2">
                     <input type="hidden" name="is_active" value="0">
                     <input type="checkbox" name="is_active" value="1"
                            {{ old('is_active', $product->is_active ?? true) ? 'checked' : '' }}

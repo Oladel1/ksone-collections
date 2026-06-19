@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductSize;
 use App\Models\ProductVariant;
@@ -13,34 +14,40 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::with(['sizes', 'variants']);
+        $query = Product::with(['sizes', 'variants', 'category']);
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
-        if ($request->filled('category')) {
-            $query->where('category', $request->category);
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
         }
         if ($request->filled('status')) {
             $query->where('is_active', $request->status === 'active');
         }
 
         $products = $query->ordered()->paginate(12)->withQueryString();
-        $categories = Product::distinct()->pluck('category');
+        $categories = Category::ordered()->get();
+        $types = Product::distinct()->pluck('type');
 
-        return view('admin.products.index', compact('products', 'categories'));
+        return view('admin.products.index', compact('products', 'categories', 'types'));
     }
 
     public function create()
     {
-        return view('admin.products.create');
+        $categories = Category::ordered()->get();
+        return view('admin.products.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name'        => 'required|string|max:255',
-            'category'    => 'required|string|max:100',
+            'category_id' => 'required|exists:categories,id',
+            'type'        => 'required|string|max:100',
             'description' => 'nullable|string|max:1000',
             'price'       => 'required|integer|min:0',
             'badge'       => 'nullable|string|max:50',
@@ -67,7 +74,8 @@ class ProductController extends Controller
         $product = Product::create([
             'name'        => $validated['name'],
             'slug'        => Str::slug($validated['name']),
-            'category'    => strtolower($validated['category']),
+            'category_id' => $validated['category_id'],
+            'type'        => strtolower($validated['type']),
             'description' => $validated['description'] ?? null,
             'price'       => $validated['price'],
             'badge'       => $validated['badge'] ?: null,
@@ -104,14 +112,16 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $product->load(['sizes', 'variants']);
-        return view('admin.products.edit', compact('product'));
+        $categories = Category::ordered()->get();
+        return view('admin.products.edit', compact('product', 'categories'));
     }
 
     public function update(Request $request, Product $product)
     {
         $validated = $request->validate([
             'name'        => 'required|string|max:255',
-            'category'    => 'required|string|max:100',
+            'category_id' => 'required|exists:categories,id',
+            'type'        => 'required|string|max:100',
             'description' => 'nullable|string|max:1000',
             'price'       => 'required|integer|min:0',
             'badge'       => 'nullable|string|max:50',
@@ -136,7 +146,8 @@ class ProductController extends Controller
 
         $product->update([
             'name'        => $validated['name'],
-            'category'    => strtolower($validated['category']),
+            'category_id' => $validated['category_id'],
+            'type'        => strtolower($validated['type']),
             'description' => $validated['description'] ?? null,
             'price'       => $validated['price'],
             'badge'       => $validated['badge'] ?: null,

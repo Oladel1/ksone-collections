@@ -15,6 +15,12 @@ class RolePermissionSeeder extends Seeder
             // Dashboard
             ['name' => 'View Dashboard',    'slug' => 'view-dashboard',    'group' => 'dashboard'],
 
+            // Categories
+            ['name' => 'View Categories',   'slug' => 'view-categories',   'group' => 'categories'],
+            ['name' => 'Create Categories', 'slug' => 'create-categories', 'group' => 'categories'],
+            ['name' => 'Edit Categories',   'slug' => 'edit-categories',   'group' => 'categories'],
+            ['name' => 'Delete Categories', 'slug' => 'delete-categories', 'group' => 'categories'],
+
             // Products
             ['name' => 'View Products',     'slug' => 'view-products',     'group' => 'products'],
             ['name' => 'Create Products',   'slug' => 'create-products',   'group' => 'products'],
@@ -55,24 +61,29 @@ class RolePermissionSeeder extends Seeder
         // Attach all permissions for reference
         $superAdmin->permissions()->sync(Permission::pluck('id'));
 
-        // Admin — products, orders, settings, dashboard
+        // Admin — categories, products, orders, settings, dashboard
         $admin = Role::firstOrCreate(
             ['slug' => 'admin'],
-            ['name' => 'Admin', 'description' => 'Manage products, orders, and settings', 'is_system' => true]
+            ['name' => 'Admin', 'description' => 'Manage categories, products, orders, and settings', 'is_system' => true]
         );
         $adminPerms = Permission::whereIn('slug', [
-            'view-dashboard', 'view-products', 'create-products', 'edit-products', 'delete-products',
+            'view-dashboard',
+            'view-categories', 'create-categories', 'edit-categories', 'delete-categories',
+            'view-products', 'create-products', 'edit-products', 'delete-products',
             'view-orders', 'manage-orders', 'manage-settings',
         ])->pluck('id');
         $admin->permissions()->sync($adminPerms);
 
-        // Editor — view + edit products & settings
+        // Editor — view + edit categories, products & settings
         $editor = Role::firstOrCreate(
             ['slug' => 'editor'],
-            ['name' => 'Editor', 'description' => 'Edit products and site content', 'is_system' => true]
+            ['name' => 'Editor', 'description' => 'Edit categories, products and site content', 'is_system' => true]
         );
         $editorPerms = Permission::whereIn('slug', [
-            'view-dashboard', 'view-products', 'edit-products', 'manage-settings', 'view-orders',
+            'view-dashboard',
+            'view-categories', 'edit-categories',
+            'view-products', 'edit-products',
+            'manage-settings', 'view-orders',
         ])->pluck('id');
         $editor->permissions()->sync($editorPerms);
     }

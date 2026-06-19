@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
@@ -9,35 +10,49 @@ use Illuminate\Http\Request;
 class PageController extends Controller
 {
     /**
-     * Phase 1: Intro page with collection icons.
+     * Phase 1: Intro page with dynamic category icons.
      */
     public function intro()
     {
-        $collections = [
-            ['name' => 'Footwear', 'subtitle' => 'Premium leather shoes', 'icon' => 'footwear', 'url' => route('footwear')],
-            ['name' => 'Bags',     'subtitle' => 'Elegant leather bags',  'icon' => 'bags',     'url' => '#'],
-            ['name' => 'Belts',    'subtitle' => 'Handcrafted belts',     'icon' => 'belts',    'url' => '#'],
-            ['name' => 'Wallets',  'subtitle' => 'Fine leather wallets',  'icon' => 'wallets',  'url' => '#'],
-        ];
+        $categories = Category::active()->ordered()->withCount('products')->get();
+
+        $collections = $categories->map(function ($cat) {
+            return [
+                'name'     => $cat->name,
+                'subtitle' => $cat->subtitle ?? '',
+                'slug'     => $cat->slug,
+                'icon_image' => $cat->icon_image,
+                'url'      => route('category', $cat->slug),
+                'count'    => $cat->products_count,
+            ];
+        })->toArray();
 
         return view('intro', compact('collections'));
     }
 
     /**
-     * Phase 2 → 3: One-page footwear showcase — now database-driven.
+     * Dynamic category page — works for Footwear, Bags, Belts, etc.
      */
-    public function footwear()
+    public function category(Category $category)
     {
-        // Products from database
-        $dbProducts = Product::active()->ordered()->with(['sizes', 'variants'])->get();
+        if (!$category->is_active) {
+            abort(404);
+        }
 
-        // Format products for the Blade template (keep same structure as Phase 2)
+        // Products from database belonging to this category
+        $dbProducts = Product::where('category_id', $category->id)
+            ->active()
+            ->ordered()
+            ->with(['sizes', 'variants'])
+            ->get();
+
+        // Format products for the Blade template
         $products = $dbProducts->map(function ($p) {
             return [
                 'id'          => $p->id,
                 'slug'        => $p->slug,
                 'name'        => $p->name,
-                'category'    => $p->category,
+                'type'        => $p->type,
                 'description' => $p->description,
                 'price'       => $p->price,
                 'image'       => $p->image,
@@ -50,7 +65,7 @@ class PageController extends Controller
             ];
         })->toArray();
 
-        $categories = array_merge(['all'], $dbProducts->pluck('category')->unique()->values()->toArray());
+        $types = array_merge(['all'], $dbProducts->pluck('type')->unique()->values()->toArray());
 
         // Site settings
         $settings = SiteSetting::allGrouped();
@@ -63,6 +78,6 @@ class PageController extends Controller
 
         $whatsapp = $s['whatsapp_number'] ?? '2347035515612';
 
-        return view('footwear', compact('products', 'categories', 'whatsapp', 's'));
+        return view('category', compact('category', 'products', 'types', 'whatsapp', 's'));
     }
 }

@@ -1,6 +1,8 @@
 {{-- Footer --}}
 @php
     $fs = $s ?? [];
+    // Load active categories for footer (uses cache-friendly query)
+    $footerCategories = \App\Models\Category::active()->ordered()->get();
 @endphp
 <footer class="bg-[#1a1a1a] text-white/80 pt-16 pb-8">
     <div class="max-w-7xl mx-auto px-6">
@@ -14,7 +16,7 @@
                     <span class="text-xl font-extrabold text-white">KS-ONE</span>
                 </div>
                 <p class="text-sm leading-relaxed text-white/60">
-                    {{ $fs['footer_description'] ?? 'Premium handcrafted footwear, proudly made in Nigeria. Every pair is a statement of quality and craftsmanship.' }}
+                    {{ $fs['footer_description'] ?? 'Premium handcrafted goods, proudly made in Nigeria. Every piece is a statement of quality and craftsmanship.' }}
                 </p>
             </div>
 
@@ -22,20 +24,24 @@
             <div>
                 <h4 class="text-xs font-bold tracking-widest uppercase text-brand-500 mb-5">Quick Links</h4>
                 <ul class="space-y-3">
-                    <li><a href="#home" class="text-sm text-white/60 hover:text-white transition-colors">Home</a></li>
+                    <li><a href="{{ route('intro') }}" class="text-sm text-white/60 hover:text-white transition-colors">Home</a></li>
                     <li><a href="#shop" class="text-sm text-white/60 hover:text-white transition-colors">Shop</a></li>
                     <li><a href="#about" class="text-sm text-white/60 hover:text-white transition-colors">About</a></li>
                     <li><a href="#contact" class="text-sm text-white/60 hover:text-white transition-colors">Contact</a></li>
                 </ul>
             </div>
 
-            {{-- Categories --}}
+            {{-- Collections (dynamic) --}}
             <div>
-                <h4 class="text-xs font-bold tracking-widest uppercase text-brand-500 mb-5">Categories</h4>
+                <h4 class="text-xs font-bold tracking-widest uppercase text-brand-500 mb-5">Collections</h4>
                 <ul class="space-y-3">
-                    <li><a href="#shop" class="text-sm text-white/60 hover:text-white transition-colors">Slides</a></li>
-                    <li><a href="#shop" class="text-sm text-white/60 hover:text-white transition-colors">Mules</a></li>
-                    <li><a href="#shop" class="text-sm text-white/60 hover:text-white transition-colors">Loafers</a></li>
+                    @foreach ($footerCategories as $fcat)
+                        <li>
+                            <a href="{{ route('category', $fcat->slug) }}" class="text-sm text-white/60 hover:text-white transition-colors">
+                                {{ $fcat->name }}
+                            </a>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
 
@@ -71,7 +77,7 @@
         {{-- Divider + Copyright --}}
         <div class="border-t border-white/10 pt-6 text-center">
             <p class="text-xs text-white/40">
-                © {{ date('Y') }} {{ $fs['footer_copyright'] ?? 'KS-One Footwear. All rights reserved. Proudly Made in Nigeria 🇳🇬' }}
+                © {{ date('Y') }} {{ $fs['footer_copyright'] ?? 'KS-One Collections. All rights reserved. Proudly Made in Nigeria 🇳🇬' }}
             </p>
         </div>
 

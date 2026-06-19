@@ -25,10 +25,16 @@
     <form method="GET" class="flex flex-wrap items-center gap-3 bg-white rounded-xl border border-gray-200/80 p-4">
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search products..."
                class="flex-1 min-w-[200px] px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B]/20 outline-none">
-        <select name="category" class="px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-[#B8860B] outline-none">
+        <select name="category_id" class="px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-[#B8860B] outline-none">
             <option value="">All Categories</option>
             @foreach ($categories as $cat)
-                <option value="{{ $cat }}" {{ request('category') === $cat ? 'selected' : '' }}>{{ ucfirst($cat) }}</option>
+                <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+            @endforeach
+        </select>
+        <select name="type" class="px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-[#B8860B] outline-none">
+            <option value="">All Types</option>
+            @foreach ($types as $type)
+                <option value="{{ $type }}" {{ request('type') === $type ? 'selected' : '' }}>{{ ucfirst($type) }}</option>
             @endforeach
         </select>
         <select name="status" class="px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-[#B8860B] outline-none">
@@ -37,7 +43,7 @@
             <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
         </select>
         <button type="submit" class="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-black transition-colors">Filter</button>
-        @if (request()->hasAny(['search', 'category', 'status']))
+        @if (request()->hasAny(['search', 'category_id', 'type', 'status']))
             <a href="{{ route('admin.products.index') }}" class="text-sm text-gray-500 hover:text-gray-700">Clear</a>
         @endif
     </form>
@@ -78,7 +84,13 @@
 
                 {{-- Info --}}
                 <div class="p-4">
-                    <span class="text-xs font-bold text-[#B8860B] uppercase tracking-wider">{{ $product->category }}</span>
+                    <div class="flex items-center gap-2">
+                        @if ($product->category)
+                            <span class="text-xs font-bold text-[#B8860B] uppercase tracking-wider">{{ $product->category->name }}</span>
+                            <span class="text-xs text-gray-300">·</span>
+                        @endif
+                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ $product->type }}</span>
+                    </div>
                     <h3 class="text-sm font-bold text-gray-900 mt-1 truncate">{{ $product->name }}</h3>
                     <p class="text-lg font-black text-gray-900 mt-1">₦{{ number_format($product->price) }}</p>
 
