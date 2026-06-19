@@ -61,7 +61,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-5 sm:gap-6 max-w-3xl w-full">
 
             @foreach ($collections as $collection)
-                <a href="#"
+                <a href="{{ $collection['url'] }}"
                    class="animate-scale-in ad-{{ $loop->iteration + 4 }}
                           collection-card group relative flex flex-col items-center gap-4 p-6 sm:p-8
                           rounded-2xl border border-black/[0.06]
