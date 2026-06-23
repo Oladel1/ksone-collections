@@ -58,29 +58,29 @@
         </div>
 
         {{-- Collection Grid (dynamic from database) --}}
-        <div class="grid grid-cols-2 sm:grid-cols-{{ min(count($collections), 4) }} gap-5 sm:gap-6 max-w-3xl w-full">
+        <div class="grid grid-cols-4 gap-3 sm:gap-6 max-w-3xl w-full px-2 sm:px-0">
 
             @foreach ($collections as $collection)
                 <a href="{{ $collection['url'] }}"
                    class="animate-scale-in ad-{{ $loop->iteration + 4 }}
-                          collection-card group relative flex flex-col items-center gap-4 p-6 sm:p-8
-                          rounded-2xl border border-black/[0.06]
+                          collection-card group relative flex flex-col items-center gap-2 sm:gap-4 p-3 sm:p-8
+                          rounded-xl sm:rounded-2xl border border-black/[0.06]
                           bg-white/80 backdrop-blur-sm
                           shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
 
                     {{-- Icon Container --}}
-                    <div class="card-icon shimmer-{{ (($loop->iteration - 1) % 4) + 1 }} w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center
-                                rounded-xl bg-[#f5f5f5] border border-black/[0.05] overflow-hidden">
+                    <div class="card-icon shimmer-{{ (($loop->iteration - 1) % 4) + 1 }} w-12 h-12 sm:w-20 sm:h-20 flex items-center justify-center
+                                rounded-lg sm:rounded-xl bg-[#f5f5f5] border border-black/[0.05] overflow-hidden">
                         <div class="icon-float-{{ (($loop->iteration - 1) % 4) + 1 }}">
                             @if ($collection['icon_image'])
                                 <img src="{{ asset('images/' . $collection['icon_image']) }}"
                                      alt="{{ $collection['name'] }}"
-                                     class="w-12 h-12 sm:w-16 sm:h-16 object-contain">
+                                     class="w-8 h-8 sm:w-16 sm:h-16 object-contain">
                             @elseif (view()->exists('components.icons.' . $collection['slug']))
                                 @include('components.icons.' . $collection['slug'])
                             @else
                                 {{-- Default icon --}}
-                                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-[#B8860B]/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <svg class="w-7 h-7 sm:w-12 sm:h-12 text-[#B8860B]/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/>
                                 </svg>
                             @endif
@@ -89,7 +89,7 @@
 
                     {{-- Label --}}
                     <div class="text-center">
-                        <h3 class="card-title font-sans text-base sm:text-lg font-bold text-[#1a1a1a]
+                        <h3 class="card-title font-sans text-xs sm:text-lg font-bold text-[#1a1a1a]
                                    transition-colors duration-300">
                             {{ $collection['name'] }}
                         </h3>
@@ -101,8 +101,8 @@
                     </div>
 
                     {{-- Hover Arrow --}}
-                    <div class="card-arrow absolute bottom-3 right-3 opacity-0 translate-x-1 -translate-y-1 transition-all duration-300">
-                        <svg class="w-4 h-4 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <div class="card-arrow absolute bottom-2 right-2 sm:bottom-3 sm:right-3 opacity-0 translate-x-1 -translate-y-1 transition-all duration-300">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"/>
                         </svg>
                     </div>
